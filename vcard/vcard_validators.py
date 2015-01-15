@@ -607,7 +607,7 @@ def validate_vcard_property(property_):
                                 raise VCardValueError(
                                     '{0}: {1}'.format(NOTE_INVALID_PARAMETER_VALUE, param_sub_value), {})
                         if set([value.lower() for value in param_values]) == {'voice'}:
-                            warnings.warn('{0}: {1}'.format(WARN_DEFAULT_TYPE_VALUE, property_.values))
+                            warnings.debug('{0}: {1}'.format(WARN_DEFAULT_TYPE_VALUE, property_.values))
                     else:
                         raise VCardNameError('{0}: {1}'.format(NOTE_INVALID_PARAMETER_NAME, parameter_name), {})
             _expect_value_count(property_.values, 1)
