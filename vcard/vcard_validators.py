@@ -7,6 +7,7 @@ Should contain all the general purpose validation code extracted from
 standards.
 """
 
+import logging
 import re
 import six
 import warnings
@@ -526,7 +527,7 @@ def validate_vcard_property(property_):
                             ''.join([''.join(names) for names in property_.values]) != name:
                         # Space in name
                         # Not just a single name
-                        warnings.debug('{0}: {1}'.format(WARN_MULTIPLE_NAMES, name.encode('utf-8')))
+                        logging.debug('{0}: {1}'.format(WARN_MULTIPLE_NAMES, name.encode('utf-8')))
 
         elif property_name == 'NICKNAME':
             # <http://tools.ietf.org/html/rfc2426#section-3.1.3>
@@ -576,7 +577,7 @@ def validate_vcard_property(property_):
                                 raise VCardValueError(
                                     '{0}: {1}'.format(NOTE_INVALID_PARAMETER_VALUE, param_sub_value), {})
                         if param_values == {'intl', 'postal', 'parcel', 'work'}:
-                            warnings.debug('{0}: {1}'.format(WARN_DEFAULT_TYPE_VALUE, property_.values))
+                            logging.debug('{0}: {1}'.format(WARN_DEFAULT_TYPE_VALUE, property_.values))
                     else:
                         validate_text_parameter(property_)
 
@@ -590,7 +591,7 @@ def validate_vcard_property(property_):
                                 raise VCardValueError(
                                     '{0}: {1}'.format(NOTE_INVALID_PARAMETER_VALUE, param_sub_value), {})
                         if param_values == {'intl', 'postal', 'parcel', 'work'}:
-                            warnings.debug('{0}: {1}'.format(WARN_DEFAULT_TYPE_VALUE, property_.values))
+                            logging.debug('{0}: {1}'.format(WARN_DEFAULT_TYPE_VALUE, property_.values))
                     else:
                         validate_text_parameter(property_)
             _expect_value_count(property_.values, 1)
@@ -607,7 +608,7 @@ def validate_vcard_property(property_):
                                 raise VCardValueError(
                                     '{0}: {1}'.format(NOTE_INVALID_PARAMETER_VALUE, param_sub_value), {})
                         if set([value.lower() for value in param_values]) == {'voice'}:
-                            warnings.debug('{0}: {1}'.format(WARN_DEFAULT_TYPE_VALUE, property_.values))
+                            logging.debug('{0}: {1}'.format(WARN_DEFAULT_TYPE_VALUE, property_.values))
                     else:
                         raise VCardNameError('{0}: {1}'.format(NOTE_INVALID_PARAMETER_NAME, parameter_name), {})
             _expect_value_count(property_.values, 1)
@@ -622,7 +623,7 @@ def validate_vcard_property(property_):
                             if param_sub_value.lower() not in EMAIL_TYPE_VALUES:
                                 warnings.warn('{0}: {1}'.format(WARN_INVALID_EMAIL_TYPE, param_sub_value))
                         if set([value.lower() for value in param_values]) == {'internet'}:
-                            warnings.debug('{0}: {1[values]}'.format(WARN_DEFAULT_TYPE_VALUE, property_))
+                            logging.debug('{0}: {1[values]}'.format(WARN_DEFAULT_TYPE_VALUE, property_))
                     else:
                         raise VCardNameError('{0}: {1}'.format(NOTE_INVALID_PARAMETER_NAME, parameter_name), {})
             _expect_value_count(property_.values, 1)
