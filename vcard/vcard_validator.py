@@ -101,7 +101,7 @@ class VCard():
 
 def unfold_vcard_lines(lines):
     """
-    Un-split lines in vCard, warning about short lines. RFC 2426 page 8.
+    Un-split lines in vCard, warning about short lines. RFC 2426 page 7.
 
     @param lines: List of potentially folded vCard lines
     @return: List of lines, one per property
