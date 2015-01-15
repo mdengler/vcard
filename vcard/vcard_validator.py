@@ -1,5 +1,6 @@
 import codecs
 import re
+import six
 import sys
 import warnings
 
@@ -248,7 +249,10 @@ def get_vcard_property(property_line):
         # Add parameter name to error
         error.context['Property line'] = property_line
         err_type = type(error)
-        raise err_type(error.message, error.context)
+        if hasattr(six, "raise_from"):
+            six.raise_from(err_type(error.message, error.context), error)
+        else:
+            raise err_type, err_type(error.message, error.context), sys.exc_info()[-1]
 
     return property_
 
