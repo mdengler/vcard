@@ -200,9 +200,10 @@ def get_vcard_properties(lines):
             except VCardError as error:
                 error.context['vCard line'] = index
                 err_type = type(error)
-                raise err_type(
-                    error.message,
-                    error.context)
+                if hasattr(six, "raise_from"):
+                    six.raise_from(err_type(error.message, error.context), error)
+                else:
+                    raise err_type, err_type(error.message, error.context), sys.exc_info()[-1]
 
     for mandatory_property in MANDATORY_PROPERTIES:
         if mandatory_property not in [property_.name.upper() for property_ in properties]:
