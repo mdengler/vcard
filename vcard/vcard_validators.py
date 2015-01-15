@@ -587,7 +587,7 @@ def validate_vcard_property(property_):
                 for parameter_name, param_values in property_.parameters.items():
                     if parameter_name.upper() == 'TYPE':
                         for param_sub_value in param_values:
-                            if param_sub_value not in LABEL_TYPE_VALUES:
+                            if param_sub_value.lower() not in LABEL_TYPE_VALUES:
                                 raise VCardValueError(
                                     '{0}: {1}'.format(NOTE_INVALID_PARAMETER_VALUE, param_sub_value), {})
                         if param_values == {'intl', 'postal', 'parcel', 'work'}:
