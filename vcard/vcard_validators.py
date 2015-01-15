@@ -526,7 +526,7 @@ def validate_vcard_property(property_):
                             ''.join([''.join(names) for names in property_.values]) != name:
                         # Space in name
                         # Not just a single name
-                        warnings.warn('{0}: {1}'.format(WARN_MULTIPLE_NAMES, name.encode('utf-8')))
+                        warnings.debug('{0}: {1}'.format(WARN_MULTIPLE_NAMES, name.encode('utf-8')))
 
         elif property_name == 'NICKNAME':
             # <http://tools.ietf.org/html/rfc2426#section-3.1.3>
