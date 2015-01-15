@@ -253,7 +253,7 @@ def get_vcard_property(property_line):
     Get a single property.
 
     @param property_line: Single unfolded vCard line
-    @return: Dictionary with name, parameters and values
+    @return: VcardProperty instance (which see) with name, parameters and values
     """
     property_parts = vcard_utils.split_unescaped(property_line, ':')
     if len(property_parts) < 2:
