@@ -96,9 +96,13 @@ class VCard():
 
         # Properties
         self.properties = get_vcard_properties(lines)
+        self._propdict = get_vcard_properties(lines, as_dict=True)
 
     def __str__(self):
         return self.text.encode('utf-8')
+
+    def __getitem__(self, key):
+        return self._propdict.get(key)
 
 
 def unfold_vcard_lines(lines):
@@ -183,7 +187,7 @@ def remove_vcard_groups(lines, group):
     return lines
 
 
-def get_vcard_properties(lines):
+def get_vcard_properties(lines, as_dict=False):
     """
     Get the properties for each line. RFC 2426 pages 28, 29.
 
@@ -210,6 +214,36 @@ def get_vcard_properties(lines):
         if mandatory_property not in [property_.name.upper() for property_ in properties]:
             raise VCardItemCountError(
                 '{0}: {1}'.format(NOTE_MISSING_PROPERTY, mandatory_property), {'Property': mandatory_property})
+
+    if as_dict:
+        propdict = dict()
+        for prop in properties:
+            if prop.parameters:
+                values = ["{} [{}]".format(v[0] if len(v) == 1 else v,
+                                           ", ".join(p))
+                          for v, p
+                          in zip(prop.values, prop.parameters.values())]
+            else:
+                values = prop.values
+
+            # TODO: remove multiple-value cleanup here and move to
+            # get_vcard_property
+            _MULTIPLE_VALUE_PROPS = [  # RFC 2426 Section 2.3
+                "N",
+                "NICKNAME",
+                "ADR",
+                "CATEGORIES"]
+            if ((not prop.name.startswith("X-"))
+                and
+                (prop.name not in _MULTIPLE_VALUE_PROPS)):
+                value = values[0][0]
+                propdict[prop.name] = value
+            else:
+                if prop.name not in propdict:
+                    propdict[prop.name] = []
+                propdict[prop.name].extend(values)
+
+        properties = propdict
 
     return properties
 
