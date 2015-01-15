@@ -622,7 +622,7 @@ def validate_vcard_property(property_):
                             if param_sub_value.lower() not in EMAIL_TYPE_VALUES:
                                 warnings.warn('{0}: {1}'.format(WARN_INVALID_EMAIL_TYPE, param_sub_value))
                         if set([value.lower() for value in param_values]) == {'internet'}:
-                            warnings.warn('{0}: {1[values]}'.format(WARN_DEFAULT_TYPE_VALUE, property_))
+                            warnings.debug('{0}: {1[values]}'.format(WARN_DEFAULT_TYPE_VALUE, property_))
                     else:
                         raise VCardNameError('{0}: {1}'.format(NOTE_INVALID_PARAMETER_NAME, parameter_name), {})
             _expect_value_count(property_.values, 1)
