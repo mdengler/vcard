@@ -590,7 +590,7 @@ def validate_vcard_property(property_):
                                 raise VCardValueError(
                                     '{0}: {1}'.format(NOTE_INVALID_PARAMETER_VALUE, param_sub_value), {})
                         if param_values == {'intl', 'postal', 'parcel', 'work'}:
-                            warnings.warn('{0}: {1}'.format(WARN_DEFAULT_TYPE_VALUE, property_.values))
+                            warnings.debug('{0}: {1}'.format(WARN_DEFAULT_TYPE_VALUE, property_.values))
                     else:
                         validate_text_parameter(property_)
             _expect_value_count(property_.values, 1)
