@@ -1,4 +1,5 @@
 import codecs
+import logging
 import re
 import six
 import sys
@@ -114,7 +115,7 @@ def unfold_vcard_lines(lines):
             raise VCardLineError(NOTE_INVALID_LINE_SEPARATOR, {'File line': index + 1})
 
         if len(line) > VCARD_LINE_MAX_LENGTH_RAW:
-            warnings.debug('Long line in vCard: {0}'.format(line.encode('utf-8')))
+            logging.debug('Long line in vCard: {0}'.format(line.encode('utf-8')))
 
         if line.startswith(' '):
             if index == 0:
