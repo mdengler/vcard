@@ -218,29 +218,16 @@ def get_vcard_properties(lines, as_dict=False):
     if as_dict:
         propdict = dict()
         for prop in properties:
-            if prop.parameters:
-                values = ["{} [{}]".format(v[0] if len(v) == 1 else v,
-                                           ", ".join(p))
-                          for v, p
-                          in zip(prop.values, prop.parameters.values())]
+            if prop.name not in propdict:
+                propdict[prop.name] = []
+            values = prop.values
+            if isinstance(values, basestring):
+                if prop.parameters:
+                    values = "{} [{}]".format(
+                        values,
+                        ", ".join(map(str, prop.parameters.values())))
+                propdict[prop.name].append(values)
             else:
-                values = prop.values
-
-            # TODO: remove multiple-value cleanup here and move to
-            # get_vcard_property
-            _MULTIPLE_VALUE_PROPS = [  # RFC 2426 Section 2.3
-                "N",
-                "NICKNAME",
-                "ADR",
-                "CATEGORIES"]
-            if ((not prop.name.startswith("X-"))
-                and
-                (prop.name not in _MULTIPLE_VALUE_PROPS)):
-                value = values[0][0]
-                propdict[prop.name] = value
-            else:
-                if prop.name not in propdict:
-                    propdict[prop.name] = []
                 propdict[prop.name].extend(values)
 
         properties = propdict
@@ -281,6 +268,22 @@ def get_vcard_property(property_line):
 
         # Validate
         vcard_validators.validate_vcard_property(property_)
+
+        # TODO: move this into vcard_validators.validate_vcard_property(..)
+        STRUCTURED_PROPERTIES = [  # see RFC 2426 Section 3
+            "N",
+            "ADR",
+            "GEO",
+            "ORG",
+        ]
+        if not (property_.name in STRUCTURED_PROPERTIES
+                or
+                property_.name.startswith("X-")):
+            assert len(property_.values) == 1, \
+                "property {} should've only had one value (had {})".format(
+                    property_.name, property_)
+            property_.values = property_.values[0][0]
+
     except VCardError as error:
         # Add parameter name to error
         error.context['Property line'] = property_line
